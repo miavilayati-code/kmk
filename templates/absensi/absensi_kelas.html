@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h3>Absensi Kelas {{ kelas.nama_kelas }}</h3>
+
+<form method="POST">
+
+{% csrf_token %}
+
+<table class="table table-bordered">
+
+<tr>
+<th>No</th>
+<th>Nama Santri</th>
+<th>Status</th>
+</tr>
+
+{% for s in santri %}
+
+<tr>
+
+<td>{{ forloop.counter }}</td>
+<td>{{ s.nama }}</td>
+
+<td>
+
+<select name="status_{{ s.id }}" class="form-control">
+
+<option value="Hadir">Hadir</option>
+<option value="Izin">Izin</option>
+<option value="Sakit">Sakit</option>
+<option value="Alfa">Alfa</option>
+
+</select>
+
+</td>
+
+</tr>
+
+{% endfor %}
+
+</table>
+
+<button class="btn btn-success">Simpan Absensi</button>
+
+</form>
+
+{% endblock %}

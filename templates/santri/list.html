@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h3>Data Santri</h3>
+
+<a href="/santri/tambah/" class="btn btn-primary mb-3">Tambah Santri</a>
+
+<table class="table table-bordered">
+
+<tr>
+<th>No</th>
+<th>Nama</th>
+<th>NIS</th>
+<th>Kelas</th>
+<th>Aksi</th>
+</tr>
+
+{% for s in santri %}
+
+<tr>
+<td>{{ forloop.counter }}</td>
+<td>{{ s.nama }}</td>
+<td>{{ s.nis }}</td>
+<td>{{ s.kelas }}</td>
+
+<td>
+
+<a href="/santri/edit/{{ s.id }}" class="btn btn-warning btn-sm">Edit</a>
+
+<a href="/santri/hapus/{{ s.id }}" class="btn btn-danger btn-sm">Hapus</a>
+
+</td>
+
+</tr>
+
+{% endfor %}
+
+</table>
+
+{% endblock %}

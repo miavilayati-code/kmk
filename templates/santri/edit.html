@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h3>Edit Santri</h3>
+
+<form method="POST">
+
+{% csrf_token %}
+
+<div class="mb-3">
+<label>Nama</label>
+<input type="text" name="nama" value="{{ data.nama }}" class="form-control">
+</div>
+
+<div class="mb-3">
+<label>NIS</label>
+<input type="text" name="nis" value="{{ data.nis }}" class="form-control">
+</div>
+
+<div class="mb-3">
+<label>Kelas</label>
+
+<select name="kelas" class="form-control">
+
+{% for k in kelas %}
+
+<option value="{{ k.id }}"
+{% if k.id == data.kelas.id %}
+selected
+{% endif %}
+>
+
+{{ k.nama_kelas }}
+
+</option>
+
+{% endfor %}
+
+</select>
+
+</div>
+
+<button class="btn btn-success">Update</button>
+
+</form>
+
+{% endblock %}

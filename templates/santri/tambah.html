@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h3>Tambah Santri</h3>
+
+<form method="POST">
+
+{% csrf_token %}
+
+<div class="mb-3">
+<label>Nama</label>
+<input type="text" name="nama" class="form-control">
+</div>
+
+<div class="mb-3">
+<label>NIS</label>
+<input type="text" name="nis" class="form-control">
+</div>
+
+<div class="mb-3">
+<label>Kelas</label>
+
+<select name="kelas" class="form-control">
+
+{% for k in kelas %}
+
+<option value="{{ k.id }}">{{ k.nama_kelas }}</option>
+
+{% endfor %}
+
+</select>
+
+</div>
+
+<button class="btn btn-success">Simpan</button>
+
+</form>
+
+{% endblock %}
