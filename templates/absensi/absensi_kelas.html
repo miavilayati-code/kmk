@@ -2,13 +2,13 @@
 
 {% block content %}
 
-<h3>Absensi Kelas {{ kelas.nama_kelas }}</h3>
+<h2>Absensi Kelas {{ jadwal.kelas }}</h2>
 
 <form method="POST">
 
 {% csrf_token %}
 
-<table class="table table-bordered">
+<table border="1">
 
 <tr>
 <th>No</th>
@@ -21,16 +21,16 @@
 <tr>
 
 <td>{{ forloop.counter }}</td>
+
 <td>{{ s.nama }}</td>
 
 <td>
 
-<select name="status_{{ s.id }}" class="form-control">
+<select name="status_{{ s.id }}">
 
-<option value="Hadir">Hadir</option>
-<option value="Izin">Izin</option>
-<option value="Sakit">Sakit</option>
-<option value="Alfa">Alfa</option>
+<option value="hadir">Hadir</option>
+<option value="izin">Izin</option>
+<option value="alpha">Alpha</option>
 
 </select>
 
@@ -42,7 +42,9 @@
 
 </table>
 
-<button class="btn btn-success">Simpan Absensi</button>
+<br>
+
+<button type="submit">Simpan Absensi</button>
 
 </form>
 

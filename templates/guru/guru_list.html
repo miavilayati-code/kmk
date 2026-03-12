@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h2>Daftar Guru</h2>
+
+<table border="1">
+
+<tr>
+<th>No</th>
+<th>Nama Guru</th>
+</tr>
+
+{% for g in guru %}
+
+<tr>
+
+<td>{{ forloop.counter }}</td>
+<td>{{ g.nama_guru }}</td>
+
+</tr>
+
+{% endfor %}
+
+</table>
+
+{% endblock %}

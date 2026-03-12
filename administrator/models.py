@@ -75,10 +75,21 @@ class MataPelajaran(models.Model):
 
     def __str__(self):
         return self.nama_mapel
+
+class Guru(models.Model):
+    nama_guru = models.CharField(max_length=100)
+
+    class Meta:
+        verbose_name = "Guru"
+        verbose_name_plural = "Guru"
+
+    def __str__(self):
+        return self.nama_guru
     
 class Jadwal(models.Model):
     kelas = models.ForeignKey(Kelas, on_delete=models.CASCADE)
     mata_pelajaran = models.ForeignKey(MataPelajaran, on_delete=models.CASCADE)
+    guru = models.ForeignKey(Guru, on_delete=models.CASCADE, null=True, blank=True)
     semester = models.ForeignKey(Semester, on_delete=models.CASCADE)
     hari = models.CharField(max_length=20)
     jam_mulai = models.TimeField()
@@ -89,7 +100,7 @@ class Jadwal(models.Model):
         verbose_name_plural = "Jadwal"
 
     def __str__(self):
-        return f"{self.kelas} - {self.mata_pelajaran}"
+        return f"{self.kelas} - {self.mata_pelajaran} - {self.guru}"
     
 class Absensi(models.Model):
     santri = models.ForeignKey(Santri, on_delete=models.CASCADE)
@@ -124,3 +135,4 @@ class Nilai(models.Model):
 
     def __str__(self):
         return f"{self.santri} - {self.nilai}"
+

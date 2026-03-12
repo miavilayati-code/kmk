@@ -1,5 +1,5 @@
-from django.shortcuts import render, redirect
-from .models import Santri, Kelas, Cabang, Absensi
+from django.shortcuts import render, redirect, get_object_or_404
+from .models import Santri, Kelas, Cabang, Absensi, Jadwal, Guru
 from datetime import date
 
 def dashboard(request):
@@ -78,11 +78,11 @@ def santri_hapus(request, id):
     return redirect('santri_list')
 
 
-def absensi_kelas(request, kelas_id):
-    kelas = Kelas.objects.get(id=kelas_id)
-    santri = Santri.objects.filter(kelas=kelas)
+def absensi_kelas(request, jadwal_id):
+    jadwal = get_object_or_404(Jadwal, id=jadwal_id)
+    santri = Santri.objects.filter(kelas=jadwal.kelas)
 
-    if request.method == 'POST':
+    if request.method == "POST":
 
         for s in santri:
 
@@ -90,15 +90,42 @@ def absensi_kelas(request, kelas_id):
 
             Absensi.objects.create(
                 santri=s,
-                tanggal=date.today(),
+                jadwal=jadwal,
                 status=status
             )
 
-        return redirect('dashboard')
+        return redirect('jadwal')
 
     context = {
-        'kelas': kelas,
+        'jadwal': jadwal,
         'santri': santri
     }
 
     return render(request, 'absensi/absensi_kelas.html', context)
+
+def daftar_jadwal(request):
+    jadwal = Jadwal.objects.select_related('kelas','mata_pelajaran','semester').all()
+
+    context = {
+        'jadwal': jadwal
+    }
+
+    return render(request, 'jadwal/daftar_jadwal.html', context)
+
+def absensi_list(request):
+    jadwal = Jadwal.objects.all()
+
+    context = {
+        'jadwal': jadwal
+    }
+
+    return render(request, 'absensi/absensi_list.html', context)
+
+def guru_list(request):
+    guru = Guru.objects.all()
+
+    context = {
+        'guru': guru
+    }
+
+    return render(request, 'guru/guru_list.html', context)

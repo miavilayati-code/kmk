@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h2>Daftar Jadwal</h2>
+
+<table border="1">
+
+<tr>
+<th>No</th>
+<th>Kelas</th>
+<th>Mata Pelajaran</th>
+<th>Guru</th>
+<th>Hari</th>
+<th>Jam</th>
+</tr>
+
+{% for j in jadwal %}
+
+<tr>
+
+<td>
+<a href="/absensi/{{ j.id }}/">Isi Absensi</a>
+</td>
+<td>{{ j.kelas }}</td>
+<td>{{ j.mata_pelajaran.nama_mapel }}</td>
+<td>{{ j.guru.nama_guru }}</td>
+<td>{{ j.hari }}</td>
+<td>{{ j.jam_mulai }} - {{ j.jam_selesai }}</td>
+
+</tr>
+
+{% endfor %}
+
+</table>
+
+{% endblock %}
