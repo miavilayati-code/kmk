@@ -105,7 +105,7 @@ class Jadwal(models.Model):
 class Absensi(models.Model):
     santri = models.ForeignKey(Santri, on_delete=models.CASCADE)
     jadwal = models.ForeignKey(Jadwal, on_delete=models.CASCADE)
-    tanggal = models.DateField()
+    tanggal = models.DateField(auto_now_add=True)
     status = models.CharField(
         max_length=10,
         choices=[
@@ -119,6 +119,7 @@ class Absensi(models.Model):
     class Meta:
         verbose_name = "Absensi"
         verbose_name_plural = "Absensi"
+        unique_together = ['santri', 'jadwal', 'tanggal']
 
     def __str__(self):
         return f"{self.santri} - {self.tanggal}"

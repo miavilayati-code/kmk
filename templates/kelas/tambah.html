@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+
+{% block title %}Tambah Kelas{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="card-title">Tambah Kelas Baru</h4>
+                </div>
+                <div class="card-body">
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="nama_kelas">Nama Kelas</label>
+                                    <input type="text" class="form-control" id="nama_kelas" name="nama_kelas" required>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="cabang">Cabang</label>
+                                    <select class="form-control" id="cabang" name="cabang" required>
+                                        <option value="">-- Pilih Cabang --</option>
+                                        {% for item in cabang %}
+                                        <option value="{{ item.id }}">{{ item.nama_cabang }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="tingkat">Tingkat</label>
+                                    <select class="form-control" id="tingkat" name="tingkat" required>
+                                        <option value="">-- Pilih Tingkat --</option>
+                                        {% for item in tingkat %}
+                                        <option value="{{ item.id }}">{{ item.nama_tingkat }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fas fa-save"></i> Simpan
+                                </button>
+                                <a href="{% url 'kelas_list' %}" class="btn btn-secondary">
+                                    <i class="fas fa-arrow-left"></i> Kembali
+                                </a>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

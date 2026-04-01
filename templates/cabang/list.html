@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+
+{% block title %}Daftar Cabang{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h4 class="card-title">Daftar Cabang</h4>
+                    <a href="{% url 'cabang_tambah' %}" class="btn btn-primary">
+                        <i class="fas fa-plus"></i> Tambah Cabang
+                    </a>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-striped table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>No</th>
+                                    <th>Nama Cabang</th>
+                                    <th>Jumlah Santri</th>
+                                    <th>Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for item in cabang_data %}
+                                <tr>
+                                    <td>{{ forloop.counter }}</td>
+                                    <td>{{ item.cabang.nama_cabang }}</td>
+                                    <td>
+                                        <span class="badge badge-primary">{{ item.santri_count }}</span>
+                                    </td>
+                                    <td>
+                                        <a href="{% url 'cabang_santri' item.cabang.id %}" class="btn btn-sm btn-info" title="Lihat Santri">
+                                            <i class="fas fa-users"></i> Lihat Santri
+                                        </a>
+                                        <a href="{% url 'cabang_edit' item.cabang.id %}" class="btn btn-sm btn-warning" title="Edit">
+                                            <i class="fas fa-edit"></i> Edit
+                                        </a>
+                                        <a href="{% url 'cabang_hapus' item.cabang.id %}" class="btn btn-sm btn-danger" 
+                                           onclick="return confirm('Apakah Anda yakin ingin menghapus cabang ini?')" title="Hapus">
+                                            <i class="fas fa-trash"></i> Hapus
+                                        </a>
+                                    </td>
+                                </tr>
+                                {% empty %}
+                                <tr>
+                                    <td colspan="4" class="text-center">Tidak ada data cabang</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
