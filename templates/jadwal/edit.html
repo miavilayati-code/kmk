@@ -1,0 +1,115 @@
+{% extends 'base.html' %}
+
+{% block title %}Edit Jadwal{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="card-title">Edit Jadwal</h4>
+                </div>
+                <div class="card-body">
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="kelas">Kelas</label>
+                                    <select class="form-control" id="kelas" name="kelas" required>
+                                        <option value="">-- Pilih Kelas --</option>
+                                        {% for item in kelas %}
+                                        <option value="{{ item.id }}" {% if item.id == data.kelas.id %}selected{% endif %}>
+                                            {{ item.nama_kelas }} - {{ item.tingkat.nama_tingkat }}
+                                        </option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="mata_pelajaran">Mata Pelajaran</label>
+                                    <select class="form-control" id="mata_pelajaran" name="mata_pelajaran" required>
+                                        <option value="">-- Pilih Mata Pelajaran --</option>
+                                        {% for item in mata_pelajaran %}
+                                        <option value="{{ item.id }}" {% if item.id == data.mata_pelajaran.id %}selected{% endif %}>
+                                            {{ item.nama_mapel }}
+                                        </option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="guru">Guru (Opsional)</label>
+                                    <select class="form-control" id="guru" name="guru">
+                                        <option value="">-- Pilih Guru --</option>
+                                        {% for item in guru %}
+                                        <option value="{{ item.id }}" {% if data.guru and item.id == data.guru.id %}selected{% endif %}>
+                                            {{ item.nama_guru }}
+                                        </option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="semester">Semester</label>
+                                    <select class="form-control" id="semester" name="semester" required>
+                                        <option value="">-- Pilih Semester --</option>
+                                        {% for item in semester %}
+                                        <option value="{{ item.id }}" {% if item.id == data.semester.id %}selected{% endif %}>
+                                            {{ item.nama_semester }} - {{ item.tahun_akademik.tahun }}
+                                        </option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="hari">Hari</label>
+                                    <select class="form-control" id="hari" name="hari" required>
+                                        <option value="">-- Pilih Hari --</option>
+                                        <option value="Senin" {% if data.hari == 'Senin' %}selected{% endif %}>Senin</option>
+                                        <option value="Selasa" {% if data.hari == 'Selasa' %}selected{% endif %}>Selasa</option>
+                                        <option value="Rabu" {% if data.hari == 'Rabu' %}selected{% endif %}>Rabu</option>
+                                        <option value="Kamis" {% if data.hari == 'Kamis' %}selected{% endif %}>Kamis</option>
+                                        <option value="Jumat" {% if data.hari == 'Jumat' %}selected{% endif %}>Jumat</option>
+                                        <option value="Sabtu" {% if data.hari == 'Sabtu' %}selected{% endif %}>Sabtu</option>
+                                        <option value="Minggu" {% if data.hari == 'Minggu' %}selected{% endif %}>Minggu</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label for="jam_mulai">Jam Mulai</label>
+                                    <input type="time" class="form-control" id="jam_mulai" name="jam_mulai" 
+                                           value="{{ data.jam_mulai|time:'H:i' }}" required>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label for="jam_selesai">Jam Selesai</label>
+                                    <input type="time" class="form-control" id="jam_selesai" name="jam_selesai" 
+                                           value="{{ data.jam_selesai|time:'H:i' }}" required>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fas fa-save"></i> Update
+                                </button>
+                                <a href="{% url 'jadwal' %}" class="btn btn-secondary">
+                                    <i class="fas fa-arrow-left"></i> Kembali
+                                </a>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

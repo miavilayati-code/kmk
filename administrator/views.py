@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import Santri, Kelas, Cabang, Absensi, Jadwal, Guru, Tingkat
+from .models import Santri, Kelas, Cabang, Absensi, Jadwal, Guru, Tingkat, MataPelajaran, Semester, TahunAkademik
 from datetime import date
 
 def dashboard(request):
@@ -148,6 +148,86 @@ def daftar_jadwal(request):
 
     return render(request, 'jadwal/daftar_jadwal.html', context)
 
+def jadwal_tambah(request):
+    kelas = Kelas.objects.select_related('cabang', 'tingkat').all()
+    mata_pelajaran = MataPelajaran.objects.all()
+    guru = Guru.objects.all()
+    semester = Semester.objects.select_related('tahun_akademik').all()
+    
+    if request.method == 'POST':
+        kelas_id = request.POST['kelas']
+        mata_pelajaran_id = request.POST['mata_pelajaran']
+        guru_id = request.POST['guru']
+        semester_id = request.POST['semester']
+        hari = request.POST['hari']
+        jam_mulai = request.POST['jam_mulai']
+        jam_selesai = request.POST['jam_selesai']
+        
+        kelas_obj = get_object_or_404(Kelas, id=kelas_id)
+        mata_pelajaran_obj = get_object_or_404(MataPelajaran, id=mata_pelajaran_id)
+        guru_obj = get_object_or_404(Guru, id=guru_id) if guru_id else None
+        semester_obj = get_object_or_404(Semester, id=semester_id)
+        
+        Jadwal.objects.create(
+            kelas=kelas_obj,
+            mata_pelajaran=mata_pelajaran_obj,
+            guru=guru_obj,
+            semester=semester_obj,
+            hari=hari,
+            jam_mulai=jam_mulai,
+            jam_selesai=jam_selesai
+        )
+        
+        return redirect('jadwal')
+    
+    context = {
+        'kelas': kelas,
+        'mata_pelajaran': mata_pelajaran,
+        'guru': guru,
+        'semester': semester
+    }
+    
+    return render(request, 'jadwal/tambah.html', context)
+
+
+def jadwal_edit(request, id):
+    jadwal = get_object_or_404(Jadwal, id=id)
+    kelas = Kelas.objects.select_related('cabang', 'tingkat').all()
+    mata_pelajaran = MataPelajaran.objects.all()
+    guru = Guru.objects.all()
+    semester = Semester.objects.select_related('tahun_akademik').all()
+    
+    if request.method == 'POST':
+        jadwal.kelas_id = request.POST['kelas']
+        jadwal.mata_pelajaran_id = request.POST['mata_pelajaran']
+        guru_id = request.POST['guru']
+        jadwal.guru_id = guru_id if guru_id else None
+        jadwal.semester_id = request.POST['semester']
+        jadwal.hari = request.POST['hari']
+        jadwal.jam_mulai = request.POST['jam_mulai']
+        jadwal.jam_selesai = request.POST['jam_selesai']
+        
+        jadwal.save()
+        
+        return redirect('jadwal')
+    
+    context = {
+        'data': jadwal,
+        'kelas': kelas,
+        'mata_pelajaran': mata_pelajaran,
+        'guru': guru,
+        'semester': semester
+    }
+    
+    return render(request, 'jadwal/edit.html', context)
+
+
+def jadwal_hapus(request, id):
+    jadwal = get_object_or_404(Jadwal, id=id)
+    jadwal.delete()
+    
+    return redirect('jadwal')
+
 def absensi_list(request):
     jadwal = Jadwal.objects.all()
 
@@ -165,6 +245,40 @@ def guru_list(request):
     }
 
     return render(request, 'guru/guru_list.html', context)
+
+
+def guru_tambah(request):
+    if request.method == 'POST':
+        nama_guru = request.POST['nama_guru']
+        
+        Guru.objects.create(nama_guru=nama_guru)
+        
+        return redirect('guru_list')
+    
+    return render(request, 'guru/tambah.html')
+
+
+def guru_edit(request, id):
+    guru = get_object_or_404(Guru, id=id)
+    
+    if request.method == 'POST':
+        guru.nama_guru = request.POST['nama_guru']
+        guru.save()
+        
+        return redirect('guru_list')
+    
+    context = {
+        'data': guru
+    }
+    
+    return render(request, 'guru/edit.html', context)
+
+
+def guru_hapus(request, id):
+    guru = get_object_or_404(Guru, id=id)
+    guru.delete()
+    
+    return redirect('guru_list')
 
 
 def kelas_list(request):
@@ -342,3 +456,152 @@ def tingkat_hapus(request, id):
     tingkat.delete()
     
     return redirect('tingkat_list')
+
+
+def mata_pelajaran_list(request):
+    mata_pelajaran = MataPelajaran.objects.all()
+    
+    context = {
+        'mata_pelajaran': mata_pelajaran
+    }
+    
+    return render(request, 'mata_pelajaran/list.html', context)
+
+
+def mata_pelajaran_tambah(request):
+    if request.method == 'POST':
+        nama_mapel = request.POST['nama_mapel']
+        
+        MataPelajaran.objects.create(nama_mapel=nama_mapel)
+        
+        return redirect('mata_pelajaran_list')
+    
+    return render(request, 'mata_pelajaran/tambah.html')
+
+
+def mata_pelajaran_edit(request, id):
+    mata_pelajaran = get_object_or_404(MataPelajaran, id=id)
+    
+    if request.method == 'POST':
+        mata_pelajaran.nama_mapel = request.POST['nama_mapel']
+        mata_pelajaran.save()
+        
+        return redirect('mata_pelajaran_list')
+    
+    context = {
+        'data': mata_pelajaran
+    }
+    
+    return render(request, 'mata_pelajaran/edit.html', context)
+
+
+def mata_pelajaran_hapus(request, id):
+    mata_pelajaran = get_object_or_404(MataPelajaran, id=id)
+    mata_pelajaran.delete()
+    
+    return redirect('mata_pelajaran_list')
+
+
+def tahun_akademik_list(request):
+    tahun_akademik = TahunAkademik.objects.all()
+    
+    context = {
+        'tahun_akademik': tahun_akademik
+    }
+    
+    return render(request, 'tahun_akademik/list.html', context)
+
+
+def tahun_akademik_tambah(request):
+    if request.method == 'POST':
+        tahun = request.POST['tahun']
+        aktif = request.POST.get('aktif', False)
+        
+        TahunAkademik.objects.create(tahun=tahun, aktif=aktif)
+        
+        return redirect('tahun_akademik_list')
+    
+    return render(request, 'tahun_akademik/tambah.html')
+
+
+def tahun_akademik_edit(request, id):
+    tahun_akademik = get_object_or_404(TahunAkademik, id=id)
+    
+    if request.method == 'POST':
+        tahun_akademik.tahun = request.POST['tahun']
+        tahun_akademik.aktif = request.POST.get('aktif', False)
+        tahun_akademik.save()
+        
+        return redirect('tahun_akademik_list')
+    
+    context = {
+        'data': tahun_akademik
+    }
+    
+    return render(request, 'tahun_akademik/edit.html', context)
+
+
+def tahun_akademik_hapus(request, id):
+    tahun_akademik = get_object_or_404(TahunAkademik, id=id)
+    tahun_akademik.delete()
+    
+    return redirect('tahun_akademik_list')
+
+
+def semester_list(request):
+    semester = Semester.objects.select_related('tahun_akademik').all()
+    
+    context = {
+        'semester': semester
+    }
+    
+    return render(request, 'semester/list.html', context)
+
+
+def semester_tambah(request):
+    tahun_akademik = TahunAkademik.objects.all()
+    
+    if request.method == 'POST':
+        nama_semester = request.POST['nama_semester']
+        tahun_akademik_id = request.POST['tahun_akademik']
+        
+        tahun_akademik_obj = get_object_or_404(TahunAkademik, id=tahun_akademik_id)
+        
+        Semester.objects.create(
+            nama_semester=nama_semester,
+            tahun_akademik=tahun_akademik_obj
+        )
+        
+        return redirect('semester_list')
+    
+    context = {
+        'tahun_akademik': tahun_akademik
+    }
+    
+    return render(request, 'semester/tambah.html', context)
+
+
+def semester_edit(request, id):
+    semester = get_object_or_404(Semester, id=id)
+    tahun_akademik = TahunAkademik.objects.all()
+    
+    if request.method == 'POST':
+        semester.nama_semester = request.POST['nama_semester']
+        semester.tahun_akademik_id = request.POST['tahun_akademik']
+        semester.save()
+        
+        return redirect('semester_list')
+    
+    context = {
+        'data': semester,
+        'tahun_akademik': tahun_akademik
+    }
+    
+    return render(request, 'semester/edit.html', context)
+
+
+def semester_hapus(request, id):
+    semester = get_object_or_404(Semester, id=id)
+    semester.delete()
+    
+    return redirect('semester_list')

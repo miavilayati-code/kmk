@@ -1,37 +1,67 @@
 {% extends 'base.html' %}
 
+{% block title %}Daftar Jadwal{% endblock %}
+
 {% block content %}
-
-<h2>Daftar Jadwal</h2>
-
-<table border="1">
-
-<tr>
-<th>No</th>
-<th>Kelas</th>
-<th>Mata Pelajaran</th>
-<th>Guru</th>
-<th>Hari</th>
-<th>Jam</th>
-</tr>
-
-{% for j in jadwal %}
-
-<tr>
-
-<td>
-<a href="/absensi/{{ j.id }}/">Isi Absensi</a>
-</td>
-<td>{{ j.kelas }}</td>
-<td>{{ j.mata_pelajaran.nama_mapel }}</td>
-<td>{{ j.guru.nama_guru }}</td>
-<td>{{ j.hari }}</td>
-<td>{{ j.jam_mulai }} - {{ j.jam_selesai }}</td>
-
-</tr>
-
-{% endfor %}
-
-</table>
-
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h4 class="card-title">Daftar Jadwal</h4>
+                    <a href="{% url 'jadwal_tambah' %}" class="btn btn-primary">
+                        <i class="fas fa-plus"></i> Tambah Jadwal
+                    </a>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-striped table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>No</th>
+                                    <th>Kelas</th>
+                                    <th>Mata Pelajaran</th>
+                                    <th>Guru</th>
+                                    <th>Semester</th>
+                                    <th>Hari</th>
+                                    <th>Jam</th>
+                                    <th>Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for item in jadwal %}
+                                <tr>
+                                    <td>{{ forloop.counter }}</td>
+                                    <td>{{ item.kelas.nama_kelas }}</td>
+                                    <td>{{ item.mata_pelajaran.nama_mapel }}</td>
+                                    <td>{{ item.guru.nama_guru|default:"-" }}</td>
+                                    <td>{{ item.semester.nama_semester }} - {{ item.semester.tahun_akademik.tahun }}</td>
+                                    <td>{{ item.hari }}</td>
+                                    <td>{{ item.jam_mulai }} - {{ item.jam_selesai }}</td>
+                                    <td>
+                                        <a href="{% url 'absensi_kelas' item.id %}" class="btn btn-sm btn-info" title="Absensi">
+                                            <i class="fas fa-check-circle"></i> Absensi
+                                        </a>
+                                        <a href="{% url 'jadwal_edit' item.id %}" class="btn btn-sm btn-warning" title="Edit">
+                                            <i class="fas fa-edit"></i> Edit
+                                        </a>
+                                        <a href="{% url 'jadwal_hapus' item.id %}" class="btn btn-sm btn-danger" 
+                                           onclick="return confirm('Apakah Anda yakin ingin menghapus jadwal ini?')" title="Hapus">
+                                            <i class="fas fa-trash"></i> Hapus
+                                        </a>
+                                    </td>
+                                </tr>
+                                {% empty %}
+                                <tr>
+                                    <td colspan="8" class="text-center">Tidak ada data jadwal</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}

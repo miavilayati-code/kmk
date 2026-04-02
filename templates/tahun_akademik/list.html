@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 
-{% block title %}Daftar Guru{% endblock %}
+{% block title %}Daftar Tahun Akademik{% endblock %}
 
 {% block content %}
 <div class="container-fluid">
@@ -8,9 +8,9 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-header d-flex justify-content-between align-items-center">
-                    <h4 class="card-title">Daftar Guru</h4>
-                    <a href="{% url 'guru_tambah' %}" class="btn btn-primary">
-                        <i class="fas fa-plus"></i> Tambah Guru
+                    <h4 class="card-title">Daftar Tahun Akademik</h4>
+                    <a href="{% url 'tahun_akademik_tambah' %}" class="btn btn-primary">
+                        <i class="fas fa-plus"></i> Tambah Tahun Akademik
                     </a>
                 </div>
                 <div class="card-body">
@@ -19,28 +19,36 @@
                             <thead>
                                 <tr>
                                     <th>No</th>
-                                    <th>Nama Guru</th>
+                                    <th>Tahun Akademik</th>
+                                    <th>Status</th>
                                     <th>Aksi</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                {% for item in guru %}
+                                {% for item in tahun_akademik %}
                                 <tr>
                                     <td>{{ forloop.counter }}</td>
-                                    <td>{{ item.nama_guru }}</td>
+                                    <td>{{ item.tahun }}</td>
                                     <td>
-                                        <a href="{% url 'guru_edit' item.id %}" class="btn btn-sm btn-warning" title="Edit">
+                                        {% if item.aktif %}
+                                            <span class="badge badge-success">Aktif</span>
+                                        {% else %}
+                                            <span class="badge badge-secondary">Tidak Aktif</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        <a href="{% url 'tahun_akademik_edit' item.id %}" class="btn btn-sm btn-warning" title="Edit">
                                             <i class="fas fa-edit"></i> Edit
                                         </a>
-                                        <a href="{% url 'guru_hapus' item.id %}" class="btn btn-sm btn-danger" 
-                                           onclick="return confirm('Apakah Anda yakin ingin menghapus guru ini?')" title="Hapus">
+                                        <a href="{% url 'tahun_akademik_hapus' item.id %}" class="btn btn-sm btn-danger" 
+                                           onclick="return confirm('Apakah Anda yakin ingin menghapus tahun akademik ini?')" title="Hapus">
                                             <i class="fas fa-trash"></i> Hapus
                                         </a>
                                     </td>
                                 </tr>
                                 {% empty %}
                                 <tr>
-                                    <td colspan="3" class="text-center">Tidak ada data guru</td>
+                                    <td colspan="4" class="text-center">Tidak ada data tahun akademik</td>
                                 </tr>
                                 {% endfor %}
                             </tbody>

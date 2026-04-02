@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 
-{% block title %}Daftar Guru{% endblock %}
+{% block title %}Daftar Mata Pelajaran{% endblock %}
 
 {% block content %}
 <div class="container-fluid">
@@ -8,9 +8,9 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-header d-flex justify-content-between align-items-center">
-                    <h4 class="card-title">Daftar Guru</h4>
-                    <a href="{% url 'guru_tambah' %}" class="btn btn-primary">
-                        <i class="fas fa-plus"></i> Tambah Guru
+                    <h4 class="card-title">Daftar Mata Pelajaran</h4>
+                    <a href="{% url 'mata_pelajaran_tambah' %}" class="btn btn-primary">
+                        <i class="fas fa-plus"></i> Tambah Mata Pelajaran
                     </a>
                 </div>
                 <div class="card-body">
@@ -19,28 +19,28 @@
                             <thead>
                                 <tr>
                                     <th>No</th>
-                                    <th>Nama Guru</th>
+                                    <th>Nama Mata Pelajaran</th>
                                     <th>Aksi</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                {% for item in guru %}
+                                {% for item in mata_pelajaran %}
                                 <tr>
                                     <td>{{ forloop.counter }}</td>
-                                    <td>{{ item.nama_guru }}</td>
+                                    <td>{{ item.nama_mapel }}</td>
                                     <td>
-                                        <a href="{% url 'guru_edit' item.id %}" class="btn btn-sm btn-warning" title="Edit">
+                                        <a href="{% url 'mata_pelajaran_edit' item.id %}" class="btn btn-sm btn-warning" title="Edit">
                                             <i class="fas fa-edit"></i> Edit
                                         </a>
-                                        <a href="{% url 'guru_hapus' item.id %}" class="btn btn-sm btn-danger" 
-                                           onclick="return confirm('Apakah Anda yakin ingin menghapus guru ini?')" title="Hapus">
+                                        <a href="{% url 'mata_pelajaran_hapus' item.id %}" class="btn btn-sm btn-danger" 
+                                           onclick="return confirm('Apakah Anda yakin ingin menghapus mata pelajaran ini?')" title="Hapus">
                                             <i class="fas fa-trash"></i> Hapus
                                         </a>
                                     </td>
                                 </tr>
                                 {% empty %}
                                 <tr>
-                                    <td colspan="3" class="text-center">Tidak ada data guru</td>
+                                    <td colspan="3" class="text-center">Tidak ada data mata pelajaran</td>
                                 </tr>
                                 {% endfor %}
                             </tbody>

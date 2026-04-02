@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+
+{% block title %}Edit Tahun Akademik{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="card-title">Edit Tahun Akademik</h4>
+                </div>
+                <div class="card-body">
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="tahun">Tahun Akademik</label>
+                                    <input type="text" class="form-control" id="tahun" name="tahun" 
+                                           value="{{ data.tahun }}" 
+                                           placeholder="contoh: 2025/2026" required>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <div class="form-check mt-4">
+                                        <input class="form-check-input" type="checkbox" id="aktif" name="aktif" value="true"
+                                               {% if data.aktif %}checked{% endif %}>
+                                        <label class="form-check-label" for="aktif">
+                                            Aktif
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fas fa-save"></i> Update
+                                </button>
+                                <a href="{% url 'tahun_akademik_list' %}" class="btn btn-secondary">
+                                    <i class="fas fa-arrow-left"></i> Kembali
+                                </a>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
