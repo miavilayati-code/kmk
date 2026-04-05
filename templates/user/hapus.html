@@ -1,0 +1,93 @@
+{% extends 'base.html' %}
+
+{% block title %}Hapus Pengguna{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="card-title">
+                        <i class="fas fa-trash"></i> 
+                        Hapus Pengguna
+                    </h4>
+                    <a href="{% url 'user_list' %}" class="btn btn-secondary float-right">
+                        <i class="fas fa-arrow-left"></i> Kembali
+                    </a>
+                </div>
+                <div class="card-body">
+                    <div class="alert alert-warning">
+                        <h5><i class="fas fa-exclamation-triangle"></i> Konfirmasi Hapus</h5>
+                        <p>Apakah Anda yakin ingin menghapus pengguna berikut?</p>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="text-center">
+                                {% if user.photo %}
+                                    <img src="{{ user.photo.url }}" alt="Foto" class="img-thumbnail" style="max-width: 150px;">
+                                {% else %}
+                                    <div class="bg-secondary text-white rounded-circle d-flex align-items-center justify-content-center mx-auto" 
+                                         style="width: 150px; height: 150px; font-size: 50px;">
+                                        <i class="fas fa-user"></i>
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="col-md-8">
+                            <table class="table table-borderless">
+                                <tr>
+                                    <td><strong>Username:</strong></td>
+                                    <td>{{ user.username }}</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Nama Lengkap:</strong></td>
+                                    <td>{{ user.get_full_name }}</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Email:</strong></td>
+                                    <td>{{ user.email }}</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Role:</strong></td>
+                                    <td>
+                                        <span class="badge badge-{{ user.role }}">
+                                            {{ user.get_role_display }}
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><strong>NIP:</strong></td>
+                                    <td>{{ user.nip|default:"-" }}</td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="alert alert-danger">
+                        <strong>Peringatan:</strong> Tindakan ini tidak dapat dibatalkan. Semua data terkait pengguna akan dihapus secara permanen.
+                    </div>
+
+                    <form method="post">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-danger">
+                            <i class="fas fa-trash"></i> Ya, Hapus Pengguna
+                        </button>
+                        <a href="{% url 'user_list' %}" class="btn btn-secondary">
+                            <i class="fas fa-times"></i> Batal
+                        </a>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.badge-admin_madin { background-color: #dc3545; }
+.badge-koordinator_kmk { background-color: #fd7e14; }
+.badge-kepala_madin { background-color: #6f42c1; }
+.badge-muallimat { background-color: #198754; }
+</style>
+{% endblock %}

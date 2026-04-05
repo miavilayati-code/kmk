@@ -1,16 +1,22 @@
 from django.urls import path
 from . import views
+from . import views_user
 
 urlpatterns = [
     path('', views.dashboard, name='dashboard'),
+    
+    # User Management URLs
+    path('user/', views_user.user_list, name='user_list'),
+    path('user/tambah/', views_user.user_tambah, name='user_tambah'),
+    path('user/edit/<int:id>/', views_user.user_edit, name='user_edit'),
+    path('user/hapus/<int:id>/', views_user.user_hapus, name='user_hapus'),
+    path('user/detail/<int:id>/', views_user.user_detail, name='user_detail'),
+    
+    # Santri URLs
     path('santri/', views.santri_list, name='santri_list'),
     path('santri/tambah/', views.santri_tambah, name='santri_tambah'),
     path('santri/edit/<int:id>/', views.santri_edit, name='santri_edit'),
     path('santri/hapus/<int:id>/', views.santri_hapus, name='santri_hapus'),
-    path('kelas/', views.kelas_list, name='kelas_list'),
-    path('kelas/tambah/', views.kelas_tambah, name='kelas_tambah'),
-    path('kelas/edit/<int:id>/', views.kelas_edit, name='kelas_edit'),
-    path('kelas/hapus/<int:id>/', views.kelas_hapus, name='kelas_hapus'),
     path('cabang/', views.cabang_list, name='cabang_list'),
     path('cabang/tambah/', views.cabang_tambah, name='cabang_tambah'),
     path('cabang/edit/<int:id>/', views.cabang_edit, name='cabang_edit'),
@@ -42,4 +48,33 @@ urlpatterns = [
     path('semester/tambah/', views.semester_tambah, name='semester_tambah'),
     path('semester/edit/<int:id>/', views.semester_edit, name='semester_edit'),
     path('semester/hapus/<int:id>/', views.semester_hapus, name='semester_hapus'),
+    # Kelas URLs
+    path('kelas/', views.kelas_list, name='kelas_list'),
+    path('kelas/tambah/', views.kelas_tambah, name='kelas_tambah'),
+    path('kelas/edit/<int:id>/', views.kelas_edit, name='kelas_edit'),
+    path('kelas/hapus/<int:id>/', views.kelas_hapus, name='kelas_hapus'),
+    # Penilaian Akademik
+    path('nilai/', views.nilai_list, name='nilai_list'),
+    path('nilai/tambah/', views.nilai_tambah, name='nilai_tambah'),
+    path('nilai/edit/<int:id>/', views.nilai_edit, name='nilai_edit'),
+    path('nilai/hapus/<int:id>/', views.nilai_hapus, name='nilai_hapus'),
+    path('nilai/mata-pelajaran/<int:mapel_id>/', views.nilai_mata_pelajaran, name='nilai_mata_pelajaran'),
+    path('nilai/semester/<int:semester_id>/', views.nilai_semester, name='nilai_semester'),
+    path('nilai/santri/<int:santri_id>/', views.nilai_santri, name='nilai_santri'),
+    path('nilai/santri/<int:santri_id>/mata-pelajaran/<int:mapel_id>/', views.nilai_santri_mapel, name='nilai_santri_mapel'),
+    path('nilai/santri/<int:santri_id>/semester/<int:semester_id>/', views.nilai_santri_semester, name='nilai_santri_semester'),
+    
+    # Input Nilai Per Semester Workflow
+    path('nilai/input/', views.nilai_input_semester, name='nilai_input_semester'),
+    path('nilai/input/semester/<int:semester_id>/', views.nilai_input_mapel, name='nilai_input_mapel'),
+    path('nilai/input/semester/<int:semester_id>/mapel/<int:mapel_id>/', views.nilai_input_kelas, name='nilai_input_kelas'),
+    path('nilai/input/semester/<int:semester_id>/mapel/<int:mapel_id>/kelas/<int:kelas_id>/', views.nilai_input_santri, name='nilai_input_santri'),
+    path('nilai/input/simpan/', views.nilai_simpan_batch, name='nilai_simpan_batch'),
+    # Rapor
+    path('rapor/', views.rapor_list, name='rapor_list'),
+    path('rapor/tambah/', views.rapor_tambah, name='rapor_tambah'),
+    path('rapor/edit/<int:id>/', views.rapor_edit, name='rapor_edit'),
+    path('rapor/detail/<int:id>/', views.rapor_detail, name='rapor_detail'),
+    path('rapor/santri/<int:santri_id>/', views.rapor_santri, name='rapor_santri'),
+    path('rapor/cetak/<int:id>/', views.rapor_cetak, name='rapor_cetak'),
 ]
