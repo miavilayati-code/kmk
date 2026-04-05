@@ -6,13 +6,12 @@ import django
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'kmk.settings')
 django.setup()
 
-from administrator.models import Cabang, Tingkat, Kelas, Santri, TahunAkademik, Semester, MataPelajaran, Guru, Jadwal
-from django.contrib.auth.models import User
+from administrator.models import Cabang, Tingkat, Kelas, Santri
 
-def create_santri_data():
-    """Create Santri data only"""
+def restore_santri_data():
+    """Restore previous Santri data"""
     
-    print("Creating Santri data...")
+    print("Restoring Santri data...")
     
     # Create Cabang if not exists
     cabang, created = Cabang.objects.get_or_create(
@@ -37,7 +36,7 @@ def create_santri_data():
     if created:
         print(f"+ Created kelas: {kelas.nama_kelas}")
     
-    # Create Santri data
+    # Restore Santri data
     santri_data = [
         {"nama": "Ahmad Rizki", "nis": "2025001", "kelas": kelas},
         {"nama": "Siti Nurhaliza", "nis": "2025002", "kelas": kelas},
@@ -49,14 +48,21 @@ def create_santri_data():
     for data in santri_data:
         santri, created = Santri.objects.get_or_create(**data)
         if created:
-            print(f"+ Created santri: {santri.nama} ({santri.nis})")
+            print(f"+ Restored santri: {santri.nama} ({santri.nis})")
+        else:
+            print(f"= Santri already exists: {santri.nama} ({santri.nis})")
     
-    print(f"\n+ Santri data created successfully!")
+    print(f"\n+ Santri data restored successfully!")
     print(f"Summary:")
     print(f"   - Cabang: {Cabang.objects.count()}")
     print(f"   - Tingkat: {Tingkat.objects.count()}")
     print(f"   - Kelas: {Kelas.objects.count()}")
     print(f"   - Santri: {Santri.objects.count()}")
+    
+    # Display all Santri
+    print(f"\nAll Santri Records:")
+    for santri in Santri.objects.all():
+        print(f"   - {santri.nis}: {santri.nama} (Kelas: {santri.kelas.nama_kelas})")
 
 if __name__ == '__main__':
-    create_santri_data()
+    restore_santri_data()
