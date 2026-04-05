@@ -3,18 +3,332 @@ from .models import Santri, Kelas, Cabang, Absensi, Jadwal, Guru, Tingkat, MataP
 from datetime import date
 
 def dashboard(request):
-    jumlah_santri = Santri.objects.count()
-    jumlah_kelas = Kelas.objects.count()
-    jumlah_cabang = Cabang.objects.count()
+    # Get statistics for dashboard
+    total_santri = Santri.objects.count()
+    total_kelas = Kelas.objects.count()
+    total_guru = Guru.objects.count()
+    total_mapel = MataPelajaran.objects.count()
 
     context = {
-        'santri': jumlah_santri,
-        'kelas': jumlah_kelas,
-        'cabang': jumlah_cabang,
+        'total_santri': total_santri,
+        'total_kelas': total_kelas,
+        'total_guru': total_guru,
+        'total_mapel': total_mapel,
     }
 
     return render(request, 'dashboard.html', context)
 
+def nilai_list(request):
+    """Daftar semua nilai"""
+    return render(request, 'nilai/list.html', {'title': 'Daftar Nilai'})
+
+def nilai_tambah(request):
+    """Tambah nilai baru"""
+    return render(request, 'nilai/form.html', {'title': 'Tambah Nilai'})
+
+def nilai_edit(request, id):
+    """Edit nilai"""
+    return render(request, 'nilai/form.html', {'title': 'Edit Nilai'})
+
+def nilai_hapus(request, id):
+    """Hapus nilai"""
+    return render(request, 'nilai/hapus.html', {'title': 'Hapus Nilai'})
+
+def nilai_mata_pelajaran(request, mapel_id):
+    """Nilai per mata pelajaran"""
+    return render(request, 'nilai/mata_pelajaran.html', {'title': 'Nilai Mata Pelajaran'})
+
+def nilai_semester(request, semester_id):
+    """Nilai per semester"""
+    return render(request, 'nilai/semester.html', {'title': 'Nilai Semester'})
+
+def nilai_santri(request, santri_id):
+    """Nilai per santri"""
+    return render(request, 'nilai/santri.html', {'title': 'Nilai Santri'})
+
+def nilai_santri_mapel(request, santri_id, mapel_id):
+    """Nilai santri per mata pelajaran"""
+    return render(request, 'nilai/santri_mapel.html', {'title': 'Nilai Santri Mata Pelajaran'})
+
+def nilai_santri_semester(request, santri_id, semester_id):
+    """Nilai santri per semester"""
+    return render(request, 'nilai/santri_semester.html', {'title': 'Nilai Santri Semester'})
+
+def nilai_input_semester(request):
+    """Input nilai - pilih semester"""
+    return render(request, 'nilai/input_semester.html', {'title': 'Input Nilai - Pilih Semester'})
+
+def nilai_input_mapel(request, semester_id):
+    """Input nilai - pilih mata pelajaran"""
+    return render(request, 'nilai/input_mapel.html', {'title': 'Input Nilai - Pilih Mata Pelajaran'})
+
+def nilai_input_kelas(request, semester_id, mapel_id):
+    """Input nilai - pilih kelas"""
+    return render(request, 'nilai/input_kelas.html', {'title': 'Input Nilai - Pilih Kelas'})
+
+def nilai_input_santri(request, semester_id, mapel_id, kelas_id):
+    """Input nilai - input santri"""
+    return render(request, 'nilai/input_santri.html', {'title': 'Input Nilai Santri'})
+
+def nilai_simpan_batch(request):
+    """Simpan batch nilai"""
+    return redirect('nilai_input_semester')
+
+def nilai_validasi(request):
+    """Validasi nilai - untuk Admin Madin & Koordinator KMK"""
+    return render(request, 'nilai/validasi.html', {'title': 'Validasi Nilai'})
+
+def rapor_list(request):
+    """Daftar rapor"""
+    return render(request, 'rapor/list.html', {'title': 'Daftar Rapor'})
+
+def rapor_tambah(request):
+    """Tambah rapor"""
+    return render(request, 'rapor/form.html', {'title': 'Tambah Rapor'})
+
+def rapor_edit(request, id):
+    """Edit rapor"""
+    return render(request, 'rapor/form.html', {'title': 'Edit Rapor'})
+
+def rapor_detail(request, id):
+    """Detail rapor"""
+    return render(request, 'rapor/detail.html', {'title': 'Detail Rapor'})
+
+def rapor_santri(request, santri_id):
+    """Rapor santri"""
+    return render(request, 'rapor/santri.html', {'title': 'Rapor Santri'})
+
+def rapor_cetak(request, id):
+    """Cetak rapor"""
+    return render(request, 'rapor/cetak.html', {'title': 'Cetak Rapor'})
+
+def setting_index(request):
+    """Halaman pengaturan - untuk Admin Madin & Koordinator KMK"""
+    return render(request, 'setting/index.html', {'title': 'Pengaturan'})
+
+def laporan_export(request):
+    """Halaman export laporan - untuk semua user"""
+    return render(request, 'laporan/export.html', {'title': 'Export Laporan'})
+
+def kelas_list(request):
+    """Daftar kelas"""
+    kelas = Kelas.objects.select_related('tingkat', 'cabang').all()
+    context = {'kelas': kelas}
+    return render(request, 'kelas/list.html', context)
+
+def kelas_tambah(request):
+    """Tambah kelas"""
+    return render(request, 'kelas/form.html', {'title': 'Tambah Kelas'})
+
+def kelas_edit(request, id):
+    """Edit kelas"""
+    return render(request, 'kelas/form.html', {'title': 'Edit Kelas'})
+
+def kelas_hapus(request, id):
+    """Hapus kelas"""
+    return render(request, 'kelas/hapus.html', {'title': 'Hapus Kelas'})
+
+def absensi_list(request):
+    """Daftar absensi"""
+    return render(request, 'absensi/list.html', {'title': 'Daftar Absensi'})
+
+def cabang_list(request):
+    """Daftar cabang"""
+    cabang = Cabang.objects.all()
+    context = {'cabang': cabang}
+    return render(request, 'cabang/list.html', context)
+
+def cabang_tambah(request):
+    """Tambah cabang"""
+    return render(request, 'cabang/form.html', {'title': 'Tambah Cabang'})
+
+def cabang_edit(request, id):
+    """Edit cabang"""
+    return render(request, 'cabang/form.html', {'title': 'Edit Cabang'})
+
+def cabang_hapus(request, id):
+    """Hapus cabang"""
+    return render(request, 'cabang/hapus.html', {'title': 'Hapus Cabang'})
+
+def cabang_santri(request, id):
+    """Santri per cabang"""
+    return render(request, 'cabang/santri.html', {'title': 'Santri Cabang'})
+
+def tingkat_list(request):
+    """Daftar tingkat"""
+    tingkat = Tingkat.objects.all()
+    context = {'tingkat': tingkat}
+    return render(request, 'tingkat/list.html', context)
+
+def tingkat_tambah(request):
+    """Tambah tingkat"""
+    return render(request, 'tingkat/form.html', {'title': 'Tambah Tingkat'})
+
+def tingkat_edit(request, id):
+    """Edit tingkat"""
+    return render(request, 'tingkat/form.html', {'title': 'Edit Tingkat'})
+
+def tingkat_hapus(request, id):
+    """Hapus tingkat"""
+    return render(request, 'tingkat/hapus.html', {'title': 'Hapus Tingkat'})
+
+def guru_list(request):
+    """Daftar guru"""
+    guru = Guru.objects.all()
+    context = {'guru': guru}
+    return render(request, 'guru/list.html', context)
+
+def guru_tambah(request):
+    """Tambah guru"""
+    return render(request, 'guru/form.html', {'title': 'Tambah Guru'})
+
+def guru_edit(request, id):
+    """Edit guru"""
+    return render(request, 'guru/form.html', {'title': 'Edit Guru'})
+
+def guru_hapus(request, id):
+    """Hapus guru"""
+    return render(request, 'guru/hapus.html', {'title': 'Hapus Guru'})
+
+def mata_pelajaran_list(request):
+    """Daftar mata pelajaran"""
+    mapel = MataPelajaran.objects.all()
+    context = {'mata_pelajaran': mapel}
+    return render(request, 'mata_pelajaran/list.html', context)
+
+def mata_pelajaran_tambah(request):
+    """Tambah mata pelajaran"""
+    return render(request, 'mata_pelajaran/form.html', {'title': 'Tambah Mata Pelajaran'})
+
+def mata_pelajaran_edit(request, id):
+    """Edit mata pelajaran"""
+    return render(request, 'mata_pelajaran/form.html', {'title': 'Edit Mata Pelajaran'})
+
+def mata_pelajaran_hapus(request, id):
+    """Hapus mata pelajaran"""
+    return render(request, 'mata_pelajaran/hapus.html', {'title': 'Hapus Mata Pelajaran'})
+
+def tahun_akademik_list(request):
+    """Daftar tahun akademik"""
+    tahun = TahunAkademik.objects.all()
+    context = {'tahun_akademik': tahun}
+    return render(request, 'tahun_akademik/list.html', context)
+
+def tahun_akademik_tambah(request):
+    """Tambah tahun akademik"""
+    return render(request, 'tahun_akademik/form.html', {'title': 'Tambah Tahun Akademik'})
+
+def tahun_akademik_edit(request, id):
+    """Edit tahun akademik"""
+    return render(request, 'tahun_akademik/form.html', {'title': 'Edit Tahun Akademik'})
+
+def tahun_akademik_hapus(request, id):
+    """Hapus tahun akademik"""
+    return render(request, 'tahun_akademik/hapus.html', {'title': 'Hapus Tahun Akademik'})
+
+def semester_list(request):
+    """Daftar semester"""
+    semester = Semester.objects.select_related('tahun_akademik').all()
+    context = {'semester': semester}
+    return render(request, 'semester/list.html', context)
+
+def semester_tambah(request):
+    """Tambah semester"""
+    return render(request, 'semester/form.html', {'title': 'Tambah Semester'})
+
+def semester_edit(request, id):
+    """Edit semester"""
+    return render(request, 'semester/form.html', {'title': 'Edit Semester'})
+
+def semester_hapus(request, id):
+    """Hapus semester"""
+    return render(request, 'semester/hapus.html', {'title': 'Hapus Semester'})
+
+def daftar_jadwal(request):
+    """Daftar jadwal"""
+    jadwal = Jadwal.objects.select_related('kelas','mata_pelajaran','semester').all()
+    context = {'jadwal': jadwal}
+    return render(request, 'jadwal/daftar_jadwal.html', context)
+
+def jadwal_tambah(request):
+    """Tambah jadwal"""
+    kelas = Kelas.objects.select_related('cabang', 'tingkat').all()
+    mata_pelajaran = MataPelajaran.objects.all()
+    guru = Guru.objects.all()
+    semester = Semester.objects.select_related('tahun_akademik').all()
+    
+    if request.method == 'POST':
+        kelas_id = request.POST['kelas']
+        mata_pelajaran_id = request.POST['mata_pelajaran']
+        guru_id = request.POST['guru']
+        semester_id = request.POST['semester']
+        hari = request.POST['hari']
+        jam_mulai = request.POST['jam_mulai']
+        jam_selesai = request.POST['jam_selesai']
+        
+        kelas_obj = get_object_or_404(Kelas, id=kelas_id)
+        mata_pelajaran_obj = get_object_or_404(MataPelajaran, id=mata_pelajaran_id)
+        guru_obj = get_object_or_404(Guru, id=guru_id) if guru_id else None
+        semester_obj = get_object_or_404(Semester, id=semester_id)
+        
+        Jadwal.objects.create(
+            kelas=kelas_obj,
+            mata_pelajaran=mata_pelajaran_obj,
+            guru=guru_obj,
+            semester=semester_obj,
+            hari=hari,
+            jam_mulai=jam_mulai,
+            jam_selesai=jam_selesai
+        )
+        
+        return redirect('jadwal')
+    
+    context = {
+        'kelas': kelas,
+        'mata_pelajaran': mata_pelajaran,
+        'guru': guru,
+        'semester': semester
+    }
+    
+    return render(request, 'jadwal/tambah.html', context)
+
+def jadwal_edit(request, id):
+    """Edit jadwal"""
+    jadwal = get_object_or_404(Jadwal, id=id)
+    kelas = Kelas.objects.select_related('cabang', 'tingkat').all()
+    mata_pelajaran = MataPelajaran.objects.all()
+    guru = Guru.objects.all()
+    semester = Semester.objects.select_related('tahun_akademik').all()
+    
+    if request.method == 'POST':
+        jadwal.kelas_id = request.POST['kelas']
+        jadwal.mata_pelajaran_id = request.POST['mata_pelajaran']
+        guru_id = request.POST['guru']
+        jadwal.guru_id = guru_id if guru_id else None
+        jadwal.semester_id = request.POST['semester']
+        jadwal.hari = request.POST['hari']
+        jadwal.jam_mulai = request.POST['jam_mulai']
+        jadwal.jam_selesai = request.POST['jam_selesai']
+        
+        jadwal.save()
+        
+        return redirect('jadwal')
+    
+    context = {
+        'data': jadwal,
+        'kelas': kelas,
+        'mata_pelajaran': mata_pelajaran,
+        'guru': guru,
+        'semester': semester
+    }
+    
+    return render(request, 'jadwal/edit.html', context)
+
+def jadwal_hapus(request, id):
+    """Hapus jadwal"""
+    jadwal = get_object_or_404(Jadwal, id=id)
+    jadwal.delete()
+    return redirect('jadwal')
 
 def santri_list(request):
     data_santri = Santri.objects.all()

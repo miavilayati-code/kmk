@@ -1,0 +1,183 @@
+{% extends 'base.html' %}
+
+{% block title %}Detail Pengguna{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="card-title">
+                        <i class="fas fa-user"></i> 
+                        Detail Pengguna
+                    </h4>
+                    <a href="{% url 'user_list' %}" class="btn btn-secondary float-right">
+                        <i class="fas fa-arrow-left"></i> Kembali
+                    </a>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="text-center">
+                                {% if user.photo %}
+                                    <img src="{{ user.photo.url }}" alt="Foto" class="img-thumbnail mb-3" style="max-width: 200px;">
+                                {% else %}
+                                    <div class="bg-secondary text-white rounded-circle d-flex align-items-center justify-content-center mx-auto mb-3" 
+                                         style="width: 200px; height: 200px; font-size: 60px;">
+                                        <i class="fas fa-user"></i>
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="col-md-9">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <h5>Informasi Dasar</h5>
+                                    <table class="table table-borderless">
+                                        <tr>
+                                            <td><strong>Username:</strong></td>
+                                            <td>{{ user.username }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Nama Lengkap:</strong></td>
+                                            <td>{{ user.get_full_name }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Email:</strong></td>
+                                            <td>{{ user.email }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Role:</strong></td>
+                                            <td>
+                                                <span class="badge badge-{{ user.role }}">
+                                                    {{ user.get_role_display }}
+                                                </span>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                                <div class="col-md-6">
+                                    <h5>Informasi Tambahan</h5>
+                                    <table class="table table-borderless">
+                                        <tr>
+                                            <td><strong>NIP:</strong></td>
+                                            <td>{{ user.nip|default:"-" }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>No. HP:</strong></td>
+                                            <td>{{ user.phone|default:"-" }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Status:</strong></td>
+                                            <td>
+                                                {% if user.is_active %}
+                                                    <span class="badge badge-success">Aktif</span>
+                                                {% else %}
+                                                    <span class="badge badge-danger">Non-aktif</span>
+                                                {% endif %}
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Staff:</strong></td>
+                                            <td>
+                                                {% if user.is_staff %}
+                                                    <span class="badge badge-info">Ya</span>
+                                                {% else %}
+                                                    <span class="badge badge-secondary">Tidak</span>
+                                                {% endif %}
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+
+                            <div class="row mt-3">
+                                <div class="col-12">
+                                    <h5>Hak Akses</h5>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="card">
+                                                <div class="card-body">
+                                                    <h6 class="card-title">Data Management</h6>
+                                                    <ul class="list-unstyled">
+                                                        <li>
+                                                            <i class="fas fa-{{ 'check' if user.can_manage_users else 'times' }} text-{{ 'success' if user.can_manage_users else 'danger' }}"></i>
+                                                            Kelola User
+                                                        </li>
+                                                        <li>
+                                                            <i class="fas fa-{{ 'check' if user.can_manage_santri else 'times' }} text-{{ 'success' if user.can_manage_santri else 'danger' }}"></i>
+                                                            Kelola Data Santri
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="card">
+                                                <div class="card-body">
+                                                    <h6 class="card-title">System Access</h6>
+                                                    <ul class="list-unstyled">
+                                                        <li>
+                                                            <i class="fas fa-{{ 'check' if user.can_manage_all_classes else 'times' }} text-{{ 'success' if user.can_manage_all_classes else 'danger' }}"></i>
+                                                            Lihat Semua Kelas
+                                                        </li>
+                                                        <li>
+                                                            <i class="fas fa-{{ 'check' if user.can_validate_grades else 'times' }} text-{{ 'success' if user.can_validate_grades else 'danger' }}"></i>
+                                                            Validasi Nilai
+                                                        </li>
+                                                        <li>
+                                                            <i class="fas fa-{{ 'check' if user.can_manage_settings else 'times' }} text-{{ 'success' if user.can_manage_settings else 'danger' }}"></i>
+                                                            Kelola Setting
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row mt-3">
+                                <div class="col-12">
+                                    <h5>Informasi Login</h5>
+                                    <table class="table table-borderless">
+                                        <tr>
+                                            <td><strong>Tanggal Dibuat:</strong></td>
+                                            <td>{{ user.date_joined|date:"d M Y H:i" }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Login Terakhir:</strong></td>
+                                            <td>{{ user.last_login|date:"d M Y H:i"|default:"Belum pernah login" }}</td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+
+                            {% if request.user.can_manage_users %}
+                            <div class="row mt-3">
+                                <div class="col-12">
+                                    <a href="{% url 'user_edit' user.id %}" class="btn btn-warning">
+                                        <i class="fas fa-edit"></i> Edit
+                                    </a>
+                                    <a href="{% url 'user_hapus' user.id %}" class="btn btn-danger">
+                                        <i class="fas fa-trash"></i> Hapus
+                                    </a>
+                                </div>
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.badge-admin_madin { background-color: #dc3545; }
+.badge-koordinator_kmk { background-color: #fd7e14; }
+.badge-kepala_madin { background-color: #6f42c1; }
+.badge-muallimat { background-color: #198754; }
+</style>
+{% endblock %}

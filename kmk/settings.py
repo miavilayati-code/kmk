@@ -43,6 +43,9 @@ INSTALLED_APPS = [
     'website',
 ]
 
+# Custom User Model
+AUTH_USER_MODEL = 'auth.User'
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -79,10 +82,10 @@ WSGI_APPLICATION = 'kmk.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'absensi_santri',
-        'USER': 'root',
-        'PASSWORD': '',
-        'HOST': '127.0.0.1',
+        'NAME': 'KMK',
+        'USER': 'django_user',
+        'PASSWORD': '123456',
+        'HOST': '172.22.47.171',
         'PORT': '3306',
     }
 }
